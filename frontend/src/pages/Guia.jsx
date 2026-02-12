@@ -2,7 +2,7 @@ import { useState } from 'react'
 import {
   BookOpen, TrendingUp, Wallet, PieChart, ShieldCheck, Target,
   DollarSign, BarChart3, CreditCard, LayoutDashboard, ChevronDown, ChevronUp,
-  Lightbulb, AlertTriangle, ArrowRight
+  Lightbulb, AlertTriangle, ArrowRight, ClipboardList
 } from 'lucide-react'
 
 const TIPOS_INVESTIMENTO = [
@@ -144,12 +144,92 @@ function Guia() {
               "Valor Investido" que representa o aporte feito.
             </CardConceito>
 
-            <CardConceito titulo="Rendimento / Rentabilidade">
-              E o ganho que o investimento gera sobre o valor aplicado, expresso em percentual.
-              Se voce investiu R$ 1.000 e agora tem R$ 1.100, sua rentabilidade foi de 10%.
-              No CashWise temos dois tipos: a Rentabilidade Estimada (quanto voce espera que renda)
-              e a Rentabilidade Real (quanto de fato rendeu ate agora).
-            </CardConceito>
+            <div className="bg-gray-700/40 rounded-lg p-4">
+              <h4 className="text-white font-semibold text-sm mb-2">Rendimento / Rentabilidade</h4>
+              <p className="text-gray-400 text-sm leading-relaxed mb-3">
+                E o ganho que o investimento gera sobre o valor aplicado, expresso em percentual.
+                Se voce investiu R$ 1.000 e agora tem R$ 1.100, sua rentabilidade foi de 10%.
+              </p>
+
+              <p className="text-white font-medium text-sm mb-2">No CashWise existem dois campos de rentabilidade:</p>
+
+              <div className="grid gap-3 mb-3">
+                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                  <h5 className="text-blue-400 font-semibold text-sm mb-1">Rent. Estimada (%)</h5>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-2">
+                    E a <span className="text-white font-medium">promessa ou projecao</span> de rendimento do investimento.
+                    Esse valor voce preenche no momento que cadastra, com base no que o banco ou corretora
+                    informa que o ativo vai render.
+                  </p>
+                  <div className="bg-gray-800/80 rounded p-2.5 text-sm space-y-1">
+                    <p className="text-gray-500">Exemplos:</p>
+                    <p className="text-gray-400">CDB do Banco Inter promete 120% do CDI ≈ <span className="text-blue-400 font-medium">13% ao ano</span></p>
+                    <p className="text-gray-400">Tesouro Selic rende aproximadamente <span className="text-blue-400 font-medium">12.75% ao ano</span></p>
+                    <p className="text-gray-400">Poupanca rende cerca de <span className="text-blue-400 font-medium">7% ao ano</span></p>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-2">
+                    Esse campo serve como referencia — e o que voce ESPERA ganhar.
+                  </p>
+                </div>
+
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                  <h5 className="text-green-400 font-semibold text-sm mb-1">Rent. Real (%)</h5>
+                  <p className="text-gray-400 text-sm leading-relaxed mb-2">
+                    E o <span className="text-white font-medium">rendimento que de fato aconteceu</span> ate o momento.
+                    Esse valor voce atualiza periodicamente conforme acompanha seu investimento no banco ou corretora.
+                    Quando voce cadastra um investimento novo, a Rent. Real comeca em <span className="text-white font-medium">0%</span> porque ele acabou de ser feito.
+                  </p>
+                  <div className="bg-gray-800/80 rounded p-2.5 text-sm space-y-1">
+                    <p className="text-gray-500">Exemplos:</p>
+                    <p className="text-gray-400">Voce cadastrou um CDB com Estimada de 13%, e 6 meses depois ja rendeu <span className="text-green-400 font-medium">6.2%</span></p>
+                    <p className="text-gray-400">Comprou acoes esperando 20%, mas caiu. Rent. Real: <span className="text-red-400 font-medium">-8%</span></p>
+                    <p className="text-gray-400">Cripto que esperava 50% e disparou: Rent. Real: <span className="text-green-400 font-medium">72%</span></p>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-2">
+                    Esse campo e o que o sistema usa para calcular o Valor Atual e o Lucro/Prejuizo.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-gray-800/80 rounded-lg p-3">
+                <p className="text-white font-medium text-sm mb-2">Exemplo pratico completo:</p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-gray-600">
+                        <th className="text-gray-400 font-medium py-1.5 px-2 text-left">Campo</th>
+                        <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Valor</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-700/50">
+                        <td className="py-1.5 px-2 text-gray-400">Valor Investido</td>
+                        <td className="py-1.5 px-2 text-white text-right">R$ 5.000,00</td>
+                      </tr>
+                      <tr className="border-b border-gray-700/50">
+                        <td className="py-1.5 px-2 text-gray-400">Rent. Estimada</td>
+                        <td className="py-1.5 px-2 text-blue-400 text-right">13% (promessa do banco)</td>
+                      </tr>
+                      <tr className="border-b border-gray-700/50">
+                        <td className="py-1.5 px-2 text-gray-400">Rent. Real (6 meses depois)</td>
+                        <td className="py-1.5 px-2 text-green-400 text-right">6.2% (rendeu ate agora)</td>
+                      </tr>
+                      <tr className="border-b border-gray-700/50">
+                        <td className="py-1.5 px-2 text-gray-400">Valor Atual (calculado)</td>
+                        <td className="py-1.5 px-2 text-white text-right font-medium">R$ 5.310,00</td>
+                      </tr>
+                      <tr>
+                        <td className="py-1.5 px-2 text-gray-400">Lucro (calculado)</td>
+                        <td className="py-1.5 px-2 text-green-400 text-right font-medium">+R$ 310,00</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-gray-500 text-xs mt-2">
+                  Formula: Valor Atual = 5.000 x (1 + 6.2 / 100) = 5.000 x 1.062 = R$ 5.310,00
+                </p>
+              </div>
+            </div>
 
             <CardConceito titulo="Juros Compostos">
               Sao os "juros sobre juros" — o principal motor de crescimento de investimentos
@@ -236,6 +316,260 @@ function Guia() {
                   Com R$ 10.000 para investir, em vez de colocar tudo em um unico tipo, voce poderia distribuir:
                   40% em Tesouro Direto (seguranca), 30% em CDB (rendimento moderado),
                   20% em FIIs (renda passiva) e 10% em Cripto (aposta de alto retorno).
+                </p>
+              </div>
+            </div>
+          </div>
+        </SecaoColapsavel>
+
+        {/* Exemplos praticos de como cadastrar */}
+        <SecaoColapsavel titulo="Exemplos Praticos: Como Cadastrar no Site" icone={ClipboardList}>
+          <p className="text-gray-400 text-sm mb-4 leading-relaxed">
+            Muita gente tem duvida de como preencher os campos na hora de cadastrar um investimento,
+            principalmente quando o investimento paga todo mes (como FIIs) ou quando o rendimento muda
+            ao longo do tempo. Veja exemplos reais abaixo:
+          </p>
+
+          {/* Exemplo FIIs */}
+          <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-4">
+            <h4 className="text-green-400 font-semibold text-sm mb-3">Exemplo 1: FII que paga dividendo todo mes</h4>
+            <p className="text-gray-400 text-sm leading-relaxed mb-3">
+              Voce comprou cotas de um FII por <span className="text-white font-medium">R$ 500,00</span> e ele
+              te paga <span className="text-white font-medium">R$ 2,70 por mes</span> de dividendo. Como cadastrar?
+            </p>
+
+            <div className="bg-gray-800/80 rounded-lg p-3 mb-3">
+              <p className="text-white font-medium text-sm mb-2">Na hora de cadastrar, preencha assim:</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <tbody>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Tipo</td>
+                      <td className="py-1.5 px-2 text-white text-right">FIIs</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Descricao</td>
+                      <td className="py-1.5 px-2 text-white text-right">MXRF11 - Maxi Renda</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Data do Aporte</td>
+                      <td className="py-1.5 px-2 text-white text-right">Data que voce comprou</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Valor Investido</td>
+                      <td className="py-1.5 px-2 text-white text-right font-medium">R$ 500,00</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Rent. Estimada (%)</td>
+                      <td className="py-1.5 px-2 text-blue-400 text-right font-medium">6.5</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Rent. Real (%)</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">0 (comeca em zero)</td>
+                    </tr>
+                    <tr>
+                      <td className="py-1.5 px-2 text-gray-400">Status</td>
+                      <td className="py-1.5 px-2 text-white text-right">Ativo</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-3">
+              <div className="flex gap-2 items-start">
+                <Lightbulb size={14} className="text-yellow-400 mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-yellow-400 font-medium text-sm mb-1">Como calcular a Rent. Estimada de um FII?</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    Pegue o dividendo mensal e multiplique por 12 para ter o valor anual.
+                    Depois divida pelo valor que voce investiu e multiplique por 100:
+                  </p>
+                  <div className="bg-gray-800/80 rounded p-2 mt-2 font-mono text-sm">
+                    <p className="text-gray-400">Dividendo anual = R$ 2,70 x 12 = <span className="text-white">R$ 32,40</span></p>
+                    <p className="text-gray-400">Rent. Estimada = (32,40 / 500) x 100 = <span className="text-blue-400 font-medium">6.5% ao ano</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-800/80 rounded-lg p-3">
+              <p className="text-white font-medium text-sm mb-2">E depois? Como atualizar todo mes?</p>
+              <p className="text-gray-400 text-sm leading-relaxed mb-2">
+                Conforme os meses passam e voce recebe os dividendos, voce vai atualizando
+                a <span className="text-green-400 font-medium">Rent. Real (%)</span> clicando no botao de editar.
+                Basta somar os dividendos recebidos, dividir pelo valor investido e multiplicar por 100:
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-600">
+                      <th className="text-gray-400 font-medium py-1.5 px-2 text-left">Mes</th>
+                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Dividendo</th>
+                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Total Recebido</th>
+                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Rent. Real</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-white">Mes 1</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 2,70</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">0.54%</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-white">Mes 2</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 5,40</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">1.08%</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-white">Mes 3</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 8,10</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">1.62%</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-white">Mes 6</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 16,20</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">3.24%</td>
+                    </tr>
+                    <tr>
+                      <td className="py-1.5 px-2 text-white">Mes 12</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
+                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 32,40</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">6.48%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-gray-500 text-xs mt-2">
+                Conta: Rent. Real = (Total Recebido / Valor Investido) x 100. Ex mes 3: (8,10 / 500) x 100 = 1.62%
+              </p>
+            </div>
+          </div>
+
+          {/* Exemplo CDB */}
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
+            <h4 className="text-blue-400 font-semibold text-sm mb-3">Exemplo 2: CDB que rende no vencimento</h4>
+            <p className="text-gray-400 text-sm leading-relaxed mb-3">
+              Voce aplicou <span className="text-white font-medium">R$ 2.000</span> em um CDB que promete
+              <span className="text-white font-medium"> 120% do CDI</span> (aproximadamente 13% ao ano).
+              O CDB vence em 1 ano e voce so recebe tudo no final.
+            </p>
+
+            <div className="bg-gray-800/80 rounded-lg p-3 mb-3">
+              <p className="text-white font-medium text-sm mb-2">Na hora de cadastrar:</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <tbody>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Tipo</td>
+                      <td className="py-1.5 px-2 text-white text-right">CDB</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Descricao</td>
+                      <td className="py-1.5 px-2 text-white text-right">CDB Banco Inter 120% CDI</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Valor Investido</td>
+                      <td className="py-1.5 px-2 text-white text-right font-medium">R$ 2.000,00</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Rent. Estimada (%)</td>
+                      <td className="py-1.5 px-2 text-blue-400 text-right font-medium">13</td>
+                    </tr>
+                    <tr>
+                      <td className="py-1.5 px-2 text-gray-400">Rent. Real (%)</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">0 (atualiza quando vencer)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Como o CDB so paga no vencimento, voce pode atualizar a Rent. Real quando verificar
+              o saldo na sua corretora (muitas mostram o rendimento acumulado). Quando vencer e
+              voce resgatar, coloque a Rent. Real final e mude o status para "Resgatado".
+            </p>
+          </div>
+
+          {/* Exemplo Acoes */}
+          <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4 mb-4">
+            <h4 className="text-orange-400 font-semibold text-sm mb-3">Exemplo 3: Acoes (pode subir ou cair)</h4>
+            <p className="text-gray-400 text-sm leading-relaxed mb-3">
+              Voce comprou acoes da Petrobras por <span className="text-white font-medium">R$ 1.000</span>,
+              esperando que valorizem 20% em 1 ano. Mas acoes oscilam — podem subir e cair.
+            </p>
+
+            <div className="bg-gray-800/80 rounded-lg p-3 mb-3">
+              <p className="text-white font-medium text-sm mb-2">Na hora de cadastrar:</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <tbody>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Tipo</td>
+                      <td className="py-1.5 px-2 text-white text-right">Acoes</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Descricao</td>
+                      <td className="py-1.5 px-2 text-white text-right">PETR4 - Petrobras</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Valor Investido</td>
+                      <td className="py-1.5 px-2 text-white text-right font-medium">R$ 1.000,00</td>
+                    </tr>
+                    <tr className="border-b border-gray-700/50">
+                      <td className="py-1.5 px-2 text-gray-400">Rent. Estimada (%)</td>
+                      <td className="py-1.5 px-2 text-blue-400 text-right font-medium">20</td>
+                    </tr>
+                    <tr>
+                      <td className="py-1.5 px-2 text-gray-400">Rent. Real (%)</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed mb-2">
+              Acoes mudam de preco todo dia. Atualize a Rent. Real conforme o valor da acao sobe ou desce:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="bg-gray-800/80 rounded p-2.5">
+                <p className="text-gray-500 text-xs mb-1">Se a acao subiu para R$ 1.150:</p>
+                <p className="text-gray-400 text-sm">Rent. Real = (150 / 1000) x 100 = <span className="text-green-400 font-medium">15%</span></p>
+              </div>
+              <div className="bg-gray-800/80 rounded p-2.5">
+                <p className="text-gray-500 text-xs mb-1">Se a acao caiu para R$ 880:</p>
+                <p className="text-gray-400 text-sm">Rent. Real = (-120 / 1000) x 100 = <span className="text-red-400 font-medium">-12%</span></p>
+              </div>
+            </div>
+          </div>
+
+          {/* Resumo geral */}
+          <div className="bg-gray-700/40 rounded-lg p-4">
+            <h4 className="text-white font-semibold text-sm mb-3">Resumo: quando atualizar a Rent. Real?</h4>
+            <div className="space-y-2">
+              <div className="flex gap-2 items-start">
+                <ArrowRight size={14} className="text-green-400 mt-1 shrink-0" />
+                <p className="text-gray-400 text-sm">
+                  <span className="text-white font-medium">FIIs</span> — atualize todo mes somando os dividendos recebidos.
+                  Conta: (total recebido / valor investido) x 100
+                </p>
+              </div>
+              <div className="flex gap-2 items-start">
+                <ArrowRight size={14} className="text-blue-400 mt-1 shrink-0" />
+                <p className="text-gray-400 text-sm">
+                  <span className="text-white font-medium">CDB / Tesouro / Poupanca</span> — atualize quando quiser, verificando o saldo na corretora ou banco.
+                  Conta: ((saldo atual - valor investido) / valor investido) x 100
+                </p>
+              </div>
+              <div className="flex gap-2 items-start">
+                <ArrowRight size={14} className="text-orange-400 mt-1 shrink-0" />
+                <p className="text-gray-400 text-sm">
+                  <span className="text-white font-medium">Acoes / Cripto</span> — atualize quando quiser, com base no preco atual.
+                  Pode ser negativo se o preco caiu. Conta: ((preco atual - preco compra) / preco compra) x 100
                 </p>
               </div>
             </div>
