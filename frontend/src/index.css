@@ -40,3 +40,18 @@ body {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
+/* Previne zoom em inputs no iOS (font-size < 16px causa zoom) */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Touch targets maiores em mobile */
+@media (max-width: 640px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

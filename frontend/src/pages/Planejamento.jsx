@@ -127,10 +127,10 @@ function Planejamento() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-white mb-6">Planejamento</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Planejamento</h2>
 
       {/* ===== SECAO 1: REGRA 50/30/20 ===== */}
-      <div className="bg-gray-800 rounded-lg p-6 mb-6">
+      <div className="bg-gray-800 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
         <div className="flex items-center gap-2 mb-5">
           <Target size={22} className="text-[#2E75B6]" />
           <h3 className="text-lg font-semibold text-white">Regra 50/30/20</h3>
@@ -169,29 +169,29 @@ function Planejamento() {
       </div>
 
       {/* ===== SECAO 2: SIMULADOR ===== */}
-      <div className="bg-gray-800 rounded-lg p-6 mb-6">
-        <div className="flex items-center gap-2 mb-5">
-          <Calculator size={22} className="text-[#7B68EE]" />
-          <h3 className="text-lg font-semibold text-white">Simulador — Quanto Posso Investir</h3>
+      <div className="bg-gray-800 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 mb-4 sm:mb-5">
+          <Calculator size={22} className="text-[#7B68EE] shrink-0" />
+          <h3 className="text-base sm:text-lg font-semibold text-white">Simulador — Quanto Posso Investir</h3>
         </div>
 
         {totalReceitas > 0 ? (
           <div className="space-y-3">
             <LinhaSimulador label="Receita Total" valor={totalReceitas} tipo="positivo" />
-            <LinhaSimulador label="(-) Despesas Fixas" valor={despesasFixas} tipo="negativo" />
-            <LinhaSimulador label="(-) Despesas Variáveis Essenciais" valor={despesasVariaveis} tipo="negativo" />
-            <LinhaSimulador label="(-) Reserva Emergência (10%)" valor={reservaEmergencia} tipo="negativo" />
+            <LinhaSimulador label="(-) Desp. Fixas" labelDesktop="(-) Despesas Fixas" valor={despesasFixas} tipo="negativo" />
+            <LinhaSimulador label="(-) Desp. Variáveis" labelDesktop="(-) Despesas Variáveis Essenciais" valor={despesasVariaveis} tipo="negativo" />
+            <LinhaSimulador label="(-) Reserva (10%)" labelDesktop="(-) Reserva Emergência (10%)" valor={reservaEmergencia} tipo="negativo" />
 
             <div className="border-t border-gray-700 pt-3">
-              <LinhaSimulador label="= Disponível para Investir" valor={disponivelInvestir} tipo="destaque" />
+              <LinhaSimulador label="= Disponível p/ Investir" labelDesktop="= Disponível para Investir" valor={disponivelInvestir} tipo="destaque" />
             </div>
 
-            <LinhaSimulador label="(-) Já investido este mês" valor={gastoInvestimentos} tipo="negativo" />
+            <LinhaSimulador label="(-) Já investido" labelDesktop="(-) Já investido este mês" valor={gastoInvestimentos} tipo="negativo" />
 
-            <div className="border-t-2 border-gray-600 pt-4">
-              <div className="flex justify-between items-center">
-                <span className="text-white font-bold text-lg">Ainda pode investir</span>
-                <span className={`text-2xl font-bold ${aindaPodeInvestir >= 0 ? 'text-[#00B050]' : 'text-[#FF4444]'}`}>
+            <div className="border-t-2 border-gray-600 pt-3 sm:pt-4">
+              <div className="flex justify-between items-center gap-2">
+                <span className="text-white font-bold text-sm sm:text-lg">Ainda pode investir</span>
+                <span className={`text-lg sm:text-2xl font-bold shrink-0 ${aindaPodeInvestir >= 0 ? 'text-[#00B050]' : 'text-[#FF4444]'}`}>
                   {formatarMoeda(Math.abs(aindaPodeInvestir))}
                 </span>
               </div>
@@ -206,16 +206,16 @@ function Planejamento() {
       </div>
 
       {/* ===== SECAO 3: METAS FINANCEIRAS ===== */}
-      <div className="bg-gray-800 rounded-lg p-6">
-        <div className="flex items-center justify-between mb-5">
+      <div className="bg-gray-800 rounded-lg p-4 sm:p-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
           <div className="flex items-center gap-2">
-            <TrendingUp size={22} className="text-[#00B050]" />
-            <h3 className="text-lg font-semibold text-white">Metas Financeiras</h3>
+            <TrendingUp size={22} className="text-[#00B050] shrink-0" />
+            <h3 className="text-base sm:text-lg font-semibold text-white">Metas Financeiras</h3>
           </div>
           <button onClick={abrirNovo}
-            className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 bg-blue-600 text-white px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 active:bg-blue-800 transition-colors"
           >
-            <Plus size={16} /> Nova Meta
+            <Plus size={16} /> <span className="hidden sm:inline">Nova</span> Meta
           </button>
         </div>
 
@@ -235,24 +235,26 @@ function Planejamento() {
               const atingida = progresso >= 100
 
               return (
-                <div key={meta.id} className="bg-gray-700/50 rounded-lg p-4">
+                <div key={meta.id} className="bg-gray-700/50 rounded-lg p-3 sm:p-4">
                   {/* Cabecalho da meta */}
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-white font-medium">{meta.descricao}</h4>
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => abrirEditar(meta)} className="p-1 text-blue-400 hover:text-blue-300 transition-colors">
-                        <Pencil size={14} />
+                    <h4 className="text-white font-medium text-sm sm:text-base truncate mr-2">{meta.descricao}</h4>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                      <button onClick={() => abrirEditar(meta)}
+                        className="p-2 sm:p-1.5 rounded-lg active:bg-gray-600 text-blue-400 hover:text-blue-300 transition-colors">
+                        <Pencil size={16} />
                       </button>
-                      <button onClick={() => { setIdParaDeletar(meta.id); setConfirmAberto(true) }} className="p-1 text-red-400 hover:text-red-300 transition-colors">
-                        <Trash2 size={14} />
+                      <button onClick={() => { setIdParaDeletar(meta.id); setConfirmAberto(true) }}
+                        className="p-2 sm:p-1.5 rounded-lg active:bg-gray-600 text-red-400 hover:text-red-300 transition-colors">
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
 
                   {/* Valores */}
-                  <div className="flex justify-between text-sm text-gray-400 mb-2">
-                    <span>{formatarMoeda(meta.valorAtual)} de {formatarMoeda(meta.valorMeta)}</span>
-                    <span className={atingida ? 'text-[#00B050] font-medium' : ''}>{progresso.toFixed(0)}%</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-400 mb-2 gap-0.5">
+                    <span className="text-xs sm:text-sm">{formatarMoeda(meta.valorAtual)} de {formatarMoeda(meta.valorMeta)}</span>
+                    <span className={`text-xs sm:text-sm ${atingida ? 'text-[#00B050] font-medium' : ''}`}>{progresso.toFixed(0)}%</span>
                   </div>
 
                   {/* Barra de progresso */}
@@ -264,8 +266,8 @@ function Planejamento() {
                   </div>
 
                   {/* Detalhes */}
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>Aporte mensal: {formatarMoeda(meta.aporteMensal)}</span>
+                  <div className="flex flex-col sm:flex-row sm:justify-between text-xs text-gray-500 gap-0.5">
+                    <span>Aporte: {formatarMoeda(meta.aporteMensal)}/mes</span>
                     <span>{atingida ? 'Meta atingida!' : `~${mesesRestantes} meses restantes`}</span>
                   </div>
                 </div>
@@ -332,15 +334,15 @@ function BarraRegra({ label, percentMeta, metaValor, atual, cor, sugestaoTexto }
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-1.5">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1.5 gap-0.5">
         <span className="text-white font-medium text-sm">{label} ({percentMeta}%)</span>
-        <span className={`text-sm ${ultrapassou ? 'text-[#FF4444]' : 'text-gray-400'}`}>
+        <span className={`text-xs sm:text-sm ${ultrapassou ? 'text-[#FF4444]' : 'text-gray-400'}`}>
           {formatarMoeda(atual)} / {formatarMoeda(metaValor)}
         </span>
       </div>
-      <div className="w-full bg-gray-700 rounded-full h-4 mb-1.5">
+      <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4 mb-1.5">
         <div
-          className={`h-4 rounded-full transition-all duration-500 ${ultrapassou ? 'bg-[#FF4444]' : cor}`}
+          className={`h-3 sm:h-4 rounded-full transition-all duration-500 ${ultrapassou ? 'bg-[#FF4444]' : cor}`}
           style={{ width: `${Math.min(percentReal, 100)}%` }}
         />
       </div>
@@ -359,17 +361,24 @@ function BarraRegra({ label, percentMeta, metaValor, atual, cor, sugestaoTexto }
 /**
  * LinhaSimulador — uma linha do simulador de investimento.
  */
-function LinhaSimulador({ label, valor, tipo }) {
+function LinhaSimulador({ label, labelDesktop, valor, tipo }) {
   const estiloValor = {
     positivo: 'text-[#00B050]',
     negativo: 'text-[#FF4444]',
-    destaque: 'text-[#2E75B6] text-lg font-bold',
+    destaque: 'text-[#2E75B6] text-base sm:text-lg font-bold',
   }
 
   return (
-    <div className="flex justify-between items-center">
-      <span className={tipo === 'destaque' ? 'text-white font-medium' : 'text-gray-400 text-sm'}>{label}</span>
-      <span className={`font-medium ${estiloValor[tipo]}`}>
+    <div className="flex justify-between items-center gap-2">
+      {labelDesktop ? (
+        <>
+          <span className={`sm:hidden ${tipo === 'destaque' ? 'text-white font-medium text-sm' : 'text-gray-400 text-xs'}`}>{label}</span>
+          <span className={`hidden sm:inline ${tipo === 'destaque' ? 'text-white font-medium' : 'text-gray-400 text-sm'}`}>{labelDesktop}</span>
+        </>
+      ) : (
+        <span className={tipo === 'destaque' ? 'text-white font-medium text-sm sm:text-base' : 'text-gray-400 text-xs sm:text-sm'}>{label}</span>
+      )}
+      <span className={`font-medium shrink-0 text-sm sm:text-base ${estiloValor[tipo]}`}>
         {tipo === 'negativo' ? '- ' : ''}{formatarMoeda(valor)}
       </span>
     </div>

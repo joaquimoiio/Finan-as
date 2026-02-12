@@ -165,42 +165,101 @@ function Investimentos() {
       {carregando && <div className="flex justify-center py-12"><div className="spinner"></div></div>}
       {erro && <p className="text-center text-red-400 py-8">{erro}</p>}
 
-      {/* Tabela */}
-      {!carregando && !erro && (
-        <div className="bg-gray-800 rounded-lg overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-gray-700">
-                <th className="px-3 py-3 text-gray-400 font-medium">Tipo</th>
-                <th className="px-3 py-3 text-gray-400 font-medium">Descrição</th>
-                <th className="px-3 py-3 text-gray-400 font-medium hidden md:table-cell">Data Aporte</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-right">Investido</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rent. Est.</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rent. Real</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-right">Valor Atual</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-right">Lucro</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-center">Status</th>
-                <th className="px-3 py-3 text-gray-400 font-medium text-center">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {investimentos.length === 0 ? (
-                <tr>
-                  <td colSpan="10" className="px-4 py-12 text-center text-gray-500">
-                    Nenhum investimento registrado
-                  </td>
+      {/* Lista de investimentos */}
+      {!carregando && !erro && investimentos.length === 0 && (
+        <div className="bg-gray-800 rounded-lg px-4 py-12 text-center text-gray-500">
+          Nenhum investimento registrado
+        </div>
+      )}
+
+      {!carregando && !erro && investimentos.length > 0 && (
+        <>
+          {/* Cards no mobile */}
+          <div className="space-y-3 md:hidden">
+            {investimentos.map((inv) => {
+              const rentReal = inv.rentabilidadeReal || 0
+              const valorAtual = inv.valorInvestido * (1 + rentReal / 100)
+              const lucro = valorAtual - inv.valorInvestido
+
+              return (
+                <div key={inv.id} className="bg-gray-800 rounded-lg p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                          inv.status === 'Ativo' ? 'bg-green-500/15 text-green-400' : 'bg-gray-600/50 text-gray-300'
+                        }`}>{inv.tipo}</span>
+                        <span className={`inline-block px-1.5 py-0.5 rounded text-xs ${
+                          inv.status === 'Ativo' ? 'text-green-500' : 'text-gray-500'
+                        }`}>{inv.status}</span>
+                      </div>
+                      <p className="text-white font-medium truncate">{inv.descricao}</p>
+                      <p className="text-gray-500 text-xs mt-0.5">{formatarData(inv.dataAporte)}</p>
+                    </div>
+                    <div className="flex items-center gap-0.5 ml-2 shrink-0">
+                      <button onClick={() => abrirEditar(inv)}
+                        className="p-2.5 rounded-lg active:bg-gray-700 text-blue-400">
+                        <Pencil size={16} />
+                      </button>
+                      <button onClick={() => { setIdParaDeletar(inv.id); setConfirmAberto(true) }}
+                        className="p-2.5 rounded-lg active:bg-gray-700 text-red-400">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                  {/* Valores em grid 2x2 */}
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 text-xs">Investido</span>
+                      <span className="text-white text-xs font-medium">{formatarMoeda(inv.valorInvestido)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 text-xs">Atual</span>
+                      <span className="text-white text-xs font-medium">{formatarMoeda(valorAtual)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 text-xs">Est. / Real</span>
+                      <span className="text-gray-400 text-xs">{inv.rentabilidadeEstimada}% / {rentReal}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500 text-xs">Lucro</span>
+                      <span className={`text-xs font-bold ${lucro >= 0 ? 'text-[#00B050]' : 'text-[#FF4444]'}`}>
+                        {formatarMoeda(lucro)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Tabela no desktop */}
+          <div className="hidden md:block bg-gray-800 rounded-lg overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <th className="px-3 py-3 text-gray-400 font-medium">Tipo</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium">Descricao</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium hidden lg:table-cell">Data Aporte</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-right">Investido</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rent. Est.</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rent. Real</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-right">Valor Atual</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-right">Lucro</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-center">Status</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-center">Acoes</th>
                 </tr>
-              ) : (
-                investimentos.map((inv, i) => {
+              </thead>
+              <tbody>
+                {investimentos.map((inv, i) => {
                   const rentReal = inv.rentabilidadeReal || 0
                   const valorAtual = inv.valorInvestido * (1 + rentReal / 100)
                   const lucro = valorAtual - inv.valorInvestido
-
                   return (
                     <tr key={inv.id} className={`border-b border-gray-700/50 ${i % 2 === 0 ? 'bg-gray-800' : 'bg-gray-800/50'}`}>
                       <td className="px-3 py-3 text-white">{inv.tipo}</td>
                       <td className="px-3 py-3 text-white">{inv.descricao}</td>
-                      <td className="px-3 py-3 text-gray-400 hidden md:table-cell">{formatarData(inv.dataAporte)}</td>
+                      <td className="px-3 py-3 text-gray-400 hidden lg:table-cell">{formatarData(inv.dataAporte)}</td>
                       <td className="px-3 py-3 text-white text-right">{formatarMoeda(inv.valorInvestido)}</td>
                       <td className="px-3 py-3 text-gray-400 text-right hidden lg:table-cell">{inv.rentabilidadeEstimada}%</td>
                       <td className="px-3 py-3 text-gray-400 text-right hidden lg:table-cell">{rentReal}%</td>
@@ -211,9 +270,7 @@ function Investimentos() {
                       <td className="px-3 py-3 text-center">
                         <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${
                           inv.status === 'Ativo' ? 'bg-green-500/15 text-green-400' : 'bg-gray-600/50 text-gray-300'
-                        }`}>
-                          {inv.status}
-                        </span>
+                        }`}>{inv.status}</span>
                       </td>
                       <td className="px-3 py-3">
                         <div className="flex items-center justify-center gap-1">
@@ -227,11 +284,11 @@ function Investimentos() {
                       </td>
                     </tr>
                   )
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       {/* Modal */}

@@ -134,72 +134,97 @@ function Receitas() {
       {/* Erro */}
       {erro && <p className="text-center text-red-400 py-8">{erro}</p>}
 
-      {/* Tabela */}
-      {!carregando && !erro && (
-        <div className="bg-gray-800 rounded-lg overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-gray-700">
-                <th className="px-4 py-3 text-gray-400 font-medium">Data</th>
-                <th className="px-4 py-3 text-gray-400 font-medium">Fonte</th>
-                <th className="px-4 py-3 text-gray-400 font-medium">Tipo</th>
-                <th className="px-4 py-3 text-gray-400 font-medium text-right">Valor</th>
-                <th className="px-4 py-3 text-gray-400 font-medium hidden md:table-cell">Observações</th>
-                <th className="px-4 py-3 text-gray-400 font-medium text-center">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {receitas.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="px-4 py-12 text-center text-gray-500">
-                    Nenhuma receita registrada neste mês
-                  </td>
+      {/* Lista de receitas */}
+      {!carregando && !erro && receitas.length === 0 && (
+        <div className="bg-gray-800 rounded-lg px-4 py-12 text-center text-gray-500">
+          Nenhuma receita registrada neste mes
+        </div>
+      )}
+
+      {!carregando && !erro && receitas.length > 0 && (
+        <>
+          {/* Cards no mobile */}
+          <div className="space-y-3 md:hidden">
+            {receitas.map((receita) => (
+              <div key={receita.id} className="bg-gray-800 rounded-lg p-4">
+                <div className="flex items-start justify-between mb-1">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-medium truncate">{receita.fonte}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">{formatarData(receita.data)} - {receita.tipo}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5 ml-2 shrink-0">
+                    <button onClick={() => abrirEditar(receita)}
+                      className="p-2.5 rounded-lg active:bg-gray-700 text-blue-400">
+                      <Pencil size={16} />
+                    </button>
+                    <button onClick={() => { setIdParaDeletar(receita.id); setConfirmAberto(true) }}
+                      className="p-2.5 rounded-lg active:bg-gray-700 text-red-400">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  {receita.observacoes ? (
+                    <span className="text-gray-500 text-xs truncate mr-2">{receita.observacoes}</span>
+                  ) : <span />}
+                  <span className="text-[#00B050] font-bold text-sm shrink-0">{formatarMoeda(receita.valor)}</span>
+                </div>
+              </div>
+            ))}
+            <div className="bg-gray-800 rounded-lg p-4 border-t-2 border-[#00B050]">
+              <div className="flex justify-between items-center">
+                <span className="text-white font-bold">Total</span>
+                <span className="text-[#00B050] font-bold text-lg">{formatarMoeda(total)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabela no desktop */}
+          <div className="hidden md:block bg-gray-800 rounded-lg overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <th className="px-4 py-3 text-gray-400 font-medium">Data</th>
+                  <th className="px-4 py-3 text-gray-400 font-medium">Fonte</th>
+                  <th className="px-4 py-3 text-gray-400 font-medium">Tipo</th>
+                  <th className="px-4 py-3 text-gray-400 font-medium text-right">Valor</th>
+                  <th className="px-4 py-3 text-gray-400 font-medium">Observacoes</th>
+                  <th className="px-4 py-3 text-gray-400 font-medium text-center">Acoes</th>
                 </tr>
-              ) : (
-                receitas.map((receita, i) => (
+              </thead>
+              <tbody>
+                {receitas.map((receita, i) => (
                   <tr key={receita.id} className={`border-b border-gray-700/50 ${i % 2 === 0 ? 'bg-gray-800' : 'bg-gray-800/50'}`}>
                     <td className="px-4 py-3 text-white">{formatarData(receita.data)}</td>
                     <td className="px-4 py-3 text-white">{receita.fonte}</td>
                     <td className="px-4 py-3 text-gray-400">{receita.tipo}</td>
-                    <td className="px-4 py-3 text-[#00B050] text-right font-semibold">
-                      {formatarMoeda(receita.valor)}
-                    </td>
-                    <td className="px-4 py-3 text-gray-400 hidden md:table-cell">{receita.observacoes}</td>
+                    <td className="px-4 py-3 text-[#00B050] text-right font-semibold">{formatarMoeda(receita.valor)}</td>
+                    <td className="px-4 py-3 text-gray-400">{receita.observacoes}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-center gap-1">
-                        <button
-                          onClick={() => abrirEditar(receita)}
-                          className="p-1.5 rounded hover:bg-gray-700 text-blue-400 hover:text-blue-300 transition-colors"
-                          title="Editar"
-                        >
+                        <button onClick={() => abrirEditar(receita)}
+                          className="p-1.5 rounded hover:bg-gray-700 text-blue-400 hover:text-blue-300 transition-colors">
                           <Pencil size={15} />
                         </button>
-                        <button
-                          onClick={() => { setIdParaDeletar(receita.id); setConfirmAberto(true) }}
-                          className="p-1.5 rounded hover:bg-gray-700 text-red-400 hover:text-red-300 transition-colors"
-                          title="Excluir"
-                        >
+                        <button onClick={() => { setIdParaDeletar(receita.id); setConfirmAberto(true) }}
+                          className="p-1.5 rounded hover:bg-gray-700 text-red-400 hover:text-red-300 transition-colors">
                           <Trash2 size={15} />
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-            {receitas.length > 0 && (
+                ))}
+              </tbody>
               <tfoot>
                 <tr className="border-t-2 border-gray-600">
                   <td colSpan="3" className="px-4 py-3 text-white font-bold">Total</td>
-                  <td className="px-4 py-3 text-[#00B050] text-right font-bold">
-                    {formatarMoeda(total)}
-                  </td>
+                  <td className="px-4 py-3 text-[#00B050] text-right font-bold">{formatarMoeda(total)}</td>
                   <td colSpan="2"></td>
                 </tr>
               </tfoot>
-            )}
-          </table>
-        </div>
+            </table>
+          </div>
+        </>
       )}
 
       {/* Modal */}

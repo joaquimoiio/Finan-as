@@ -21,12 +21,12 @@ function KPICard({ titulo, valor, icone: Icone, cor }) {
   const estilo = estilos[cor] || estilos.blue
 
   return (
-    <div className={`bg-gray-800 rounded-lg p-4 border-l-4 ${estilo.borda}`}>
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-gray-400 text-sm">{titulo}</span>
-        {Icone && <Icone size={20} className={estilo.texto} />}
+    <div className={`bg-gray-800 rounded-lg p-3 sm:p-4 border-l-4 ${estilo.borda}`}>
+      <div className="flex items-center justify-between mb-1 sm:mb-2">
+        <span className="text-gray-400 text-xs sm:text-sm">{titulo}</span>
+        {Icone && <Icone size={18} className={`${estilo.texto} shrink-0`} />}
       </div>
-      <p className="text-white text-xl font-bold">{valor}</p>
+      <p className="text-white text-base sm:text-xl font-bold truncate">{valor}</p>
     </div>
   )
 }
