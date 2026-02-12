@@ -7,7 +7,8 @@ import {
   TrendingUp,
   Target,
   LogOut,
-  X
+  X,
+  Wallet
 } from 'lucide-react'
 
 // Links do menu com icone e texto
@@ -44,8 +45,8 @@ function Sidebar({ aberta, fechar }) {
       `}>
         {/* Logo */}
         <div className="flex items-center justify-between px-5 py-5 border-b border-gray-700">
-          <h1 className="text-xl font-bold text-white tracking-tight">
-            <span className="mr-1">💰</span> MeuFinanceiro
+          <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+            <Wallet size={22} className="text-blue-400" /> CashWise
           </h1>
           <button
             onClick={fechar}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { UserPlus } from 'lucide-react'
+import { UserPlus, Wallet } from 'lucide-react'
 
 /**
  * Pagina de Registro — formulario para criar conta.
@@ -47,9 +47,11 @@ function Registro() {
       <div className="bg-gray-800 rounded-xl shadow-2xl p-8 w-full max-w-md">
         {/* Titulo */}
         <div className="text-center mb-8">
-          <div className="text-5xl mb-3">💰</div>
+          <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <Wallet size={30} className="text-white" />
+          </div>
           <h1 className="text-3xl font-bold text-white mb-1">Criar Conta</h1>
-          <p className="text-gray-400 text-sm">Comece a controlar suas finanças</p>
+          <p className="text-gray-400 text-sm">Comece a usar o CashWise</p>
         </div>
 
         {/* Erro */}
