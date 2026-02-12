@@ -173,20 +173,20 @@ function Guia() {
                 </div>
 
                 <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
-                  <h5 className="text-green-400 font-semibold text-sm mb-1">Rent. Real (%)</h5>
+                  <h5 className="text-green-400 font-semibold text-sm mb-1">Rendimento Recebido (R$)</h5>
                   <p className="text-gray-400 text-sm leading-relaxed mb-2">
-                    E o <span className="text-white font-medium">rendimento que de fato aconteceu</span> ate o momento.
-                    Esse valor voce atualiza periodicamente conforme acompanha seu investimento no banco ou corretora.
-                    Quando voce cadastra um investimento novo, a Rent. Real comeca em <span className="text-white font-medium">0%</span> porque ele acabou de ser feito.
+                    E o <span className="text-white font-medium">valor em reais que voce ja recebeu</span> desse investimento ate agora.
+                    Voce so precisa digitar quanto recebeu — o sistema calcula a porcentagem e o lucro automaticamente.
+                    Quando voce cadastra um investimento novo, o rendimento comeca em <span className="text-white font-medium">R$ 0</span>.
                   </p>
                   <div className="bg-gray-800/80 rounded p-2.5 text-sm space-y-1">
                     <p className="text-gray-500">Exemplos:</p>
-                    <p className="text-gray-400">Voce cadastrou um CDB com Estimada de 13%, e 6 meses depois ja rendeu <span className="text-green-400 font-medium">6.2%</span></p>
-                    <p className="text-gray-400">Comprou acoes esperando 20%, mas caiu. Rent. Real: <span className="text-red-400 font-medium">-8%</span></p>
-                    <p className="text-gray-400">Cripto que esperava 50% e disparou: Rent. Real: <span className="text-green-400 font-medium">72%</span></p>
+                    <p className="text-gray-400">FII pagou dividendos de <span className="text-green-400 font-medium">R$ 2,70</span> no mes? Coloque 2.70</p>
+                    <p className="text-gray-400">CDB rendeu <span className="text-green-400 font-medium">R$ 310,00</span> em 6 meses? Coloque 310</p>
+                    <p className="text-gray-400">Acoes subiram e voce ganhou <span className="text-green-400 font-medium">R$ 150,00</span>? Coloque 150</p>
                   </div>
                   <p className="text-gray-500 text-xs mt-2">
-                    Esse campo e o que o sistema usa para calcular o Valor Atual e o Lucro/Prejuizo.
+                    O sistema usa esse valor para calcular o Valor Atual e o Lucro/Prejuizo automaticamente.
                   </p>
                 </div>
               </div>
@@ -211,8 +211,8 @@ function Guia() {
                         <td className="py-1.5 px-2 text-blue-400 text-right">13% (promessa do banco)</td>
                       </tr>
                       <tr className="border-b border-gray-700/50">
-                        <td className="py-1.5 px-2 text-gray-400">Rent. Real (6 meses depois)</td>
-                        <td className="py-1.5 px-2 text-green-400 text-right">6.2% (rendeu ate agora)</td>
+                        <td className="py-1.5 px-2 text-gray-400">Rendimento Recebido (6 meses)</td>
+                        <td className="py-1.5 px-2 text-green-400 text-right">R$ 310,00</td>
                       </tr>
                       <tr className="border-b border-gray-700/50">
                         <td className="py-1.5 px-2 text-gray-400">Valor Atual (calculado)</td>
@@ -226,7 +226,7 @@ function Guia() {
                   </table>
                 </div>
                 <p className="text-gray-500 text-xs mt-2">
-                  Formula: Valor Atual = 5.000 x (1 + 6.2 / 100) = 5.000 x 1.062 = R$ 5.310,00
+                  Formula: Valor Atual = R$ 5.000 + R$ 310 = R$ 5.310,00. Voce so digita 310 no campo!
                 </p>
               </div>
             </div>
@@ -364,7 +364,7 @@ function Guia() {
                       <td className="py-1.5 px-2 text-blue-400 text-right font-medium">6.5</td>
                     </tr>
                     <tr className="border-b border-gray-700/50">
-                      <td className="py-1.5 px-2 text-gray-400">Rent. Real (%)</td>
+                      <td className="py-1.5 px-2 text-gray-400">Rendimento (R$)</td>
                       <td className="py-1.5 px-2 text-green-400 text-right font-medium">0 (comeca em zero)</td>
                     </tr>
                     <tr>
@@ -396,9 +396,9 @@ function Guia() {
             <div className="bg-gray-800/80 rounded-lg p-3">
               <p className="text-white font-medium text-sm mb-2">E depois? Como atualizar todo mes?</p>
               <p className="text-gray-400 text-sm leading-relaxed mb-2">
-                Conforme os meses passam e voce recebe os dividendos, voce vai atualizando
-                a <span className="text-green-400 font-medium">Rent. Real (%)</span> clicando no botao de editar.
-                Basta somar os dividendos recebidos, dividir pelo valor investido e multiplicar por 100:
+                Conforme os meses passam e voce recebe os dividendos, basta clicar em editar
+                e atualizar o campo <span className="text-green-400 font-medium">Rendimento (R$)</span> com o total acumulado.
+                Sem calcular porcentagem — so digita o valor em reais!
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -406,46 +406,46 @@ function Guia() {
                     <tr className="border-b border-gray-600">
                       <th className="text-gray-400 font-medium py-1.5 px-2 text-left">Mes</th>
                       <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Dividendo</th>
-                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Total Recebido</th>
-                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Rent. Real</th>
+                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Voce digita</th>
+                      <th className="text-gray-400 font-medium py-1.5 px-2 text-right">Sistema calcula</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr className="border-b border-gray-700/50">
                       <td className="py-1.5 px-2 text-white">Mes 1</td>
                       <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
-                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 2,70</td>
-                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">0.54%</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">2.70</td>
+                      <td className="py-1.5 px-2 text-gray-400 text-right">Lucro: R$ 2,70</td>
                     </tr>
                     <tr className="border-b border-gray-700/50">
                       <td className="py-1.5 px-2 text-white">Mes 2</td>
                       <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
-                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 5,40</td>
-                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">1.08%</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">5.40</td>
+                      <td className="py-1.5 px-2 text-gray-400 text-right">Lucro: R$ 5,40</td>
                     </tr>
                     <tr className="border-b border-gray-700/50">
                       <td className="py-1.5 px-2 text-white">Mes 3</td>
                       <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
-                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 8,10</td>
-                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">1.62%</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">8.10</td>
+                      <td className="py-1.5 px-2 text-gray-400 text-right">Lucro: R$ 8,10</td>
                     </tr>
                     <tr className="border-b border-gray-700/50">
                       <td className="py-1.5 px-2 text-white">Mes 6</td>
                       <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
-                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 16,20</td>
-                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">3.24%</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">16.20</td>
+                      <td className="py-1.5 px-2 text-gray-400 text-right">Lucro: R$ 16,20</td>
                     </tr>
                     <tr>
                       <td className="py-1.5 px-2 text-white">Mes 12</td>
                       <td className="py-1.5 px-2 text-gray-300 text-right">+R$ 2,70</td>
-                      <td className="py-1.5 px-2 text-gray-300 text-right">R$ 32,40</td>
-                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">6.48%</td>
+                      <td className="py-1.5 px-2 text-green-400 text-right font-medium">32.40</td>
+                      <td className="py-1.5 px-2 text-gray-400 text-right">Lucro: R$ 32,40</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <p className="text-gray-500 text-xs mt-2">
-                Conta: Rent. Real = (Total Recebido / Valor Investido) x 100. Ex mes 3: (8,10 / 500) x 100 = 1.62%
+                Basta somar os dividendos: mes 3 = R$ 2,70 x 3 = R$ 8,10. Digita 8.10 no campo e pronto!
               </p>
             </div>
           </div>
@@ -481,7 +481,7 @@ function Guia() {
                       <td className="py-1.5 px-2 text-blue-400 text-right font-medium">13</td>
                     </tr>
                     <tr>
-                      <td className="py-1.5 px-2 text-gray-400">Rent. Real (%)</td>
+                      <td className="py-1.5 px-2 text-gray-400">Rendimento (R$)</td>
                       <td className="py-1.5 px-2 text-green-400 text-right font-medium">0 (atualiza quando vencer)</td>
                     </tr>
                   </tbody>
@@ -489,9 +489,9 @@ function Guia() {
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Como o CDB so paga no vencimento, voce pode atualizar a Rent. Real quando verificar
-              o saldo na sua corretora (muitas mostram o rendimento acumulado). Quando vencer e
-              voce resgatar, coloque a Rent. Real final e mude o status para "Resgatado".
+              Como o CDB so paga no vencimento, voce pode atualizar o Rendimento quando verificar
+              o saldo na sua corretora (muitas mostram o rendimento acumulado em R$). Quando vencer e
+              voce resgatar, coloque o rendimento final e mude o status para "Resgatado".
             </p>
           </div>
 
@@ -525,7 +525,7 @@ function Guia() {
                       <td className="py-1.5 px-2 text-blue-400 text-right font-medium">20</td>
                     </tr>
                     <tr>
-                      <td className="py-1.5 px-2 text-gray-400">Rent. Real (%)</td>
+                      <td className="py-1.5 px-2 text-gray-400">Rendimento (R$)</td>
                       <td className="py-1.5 px-2 text-green-400 text-right font-medium">0</td>
                     </tr>
                   </tbody>
@@ -533,43 +533,43 @@ function Guia() {
               </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-2">
-              Acoes mudam de preco todo dia. Atualize a Rent. Real conforme o valor da acao sobe ou desce:
+              Acoes mudam de preco todo dia. Atualize o Rendimento conforme o valor da acao sobe ou desce:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div className="bg-gray-800/80 rounded p-2.5">
                 <p className="text-gray-500 text-xs mb-1">Se a acao subiu para R$ 1.150:</p>
-                <p className="text-gray-400 text-sm">Rent. Real = (150 / 1000) x 100 = <span className="text-green-400 font-medium">15%</span></p>
+                <p className="text-gray-400 text-sm">Rendimento = 1.150 - 1.000 = <span className="text-green-400 font-medium">R$ 150</span></p>
               </div>
               <div className="bg-gray-800/80 rounded p-2.5">
                 <p className="text-gray-500 text-xs mb-1">Se a acao caiu para R$ 880:</p>
-                <p className="text-gray-400 text-sm">Rent. Real = (-120 / 1000) x 100 = <span className="text-red-400 font-medium">-12%</span></p>
+                <p className="text-gray-400 text-sm">Rendimento = 880 - 1.000 = <span className="text-red-400 font-medium">R$ -120</span></p>
               </div>
             </div>
           </div>
 
           {/* Resumo geral */}
           <div className="bg-gray-700/40 rounded-lg p-4">
-            <h4 className="text-white font-semibold text-sm mb-3">Resumo: quando atualizar a Rent. Real?</h4>
+            <h4 className="text-white font-semibold text-sm mb-3">Resumo: quando atualizar o Rendimento?</h4>
             <div className="space-y-2">
               <div className="flex gap-2 items-start">
                 <ArrowRight size={14} className="text-green-400 mt-1 shrink-0" />
                 <p className="text-gray-400 text-sm">
                   <span className="text-white font-medium">FIIs</span> — atualize todo mes somando os dividendos recebidos.
-                  Conta: (total recebido / valor investido) x 100
+                  Ex: 3 meses x R$ 2,70 = digite <span className="text-green-400">8.10</span>
                 </p>
               </div>
               <div className="flex gap-2 items-start">
                 <ArrowRight size={14} className="text-blue-400 mt-1 shrink-0" />
                 <p className="text-gray-400 text-sm">
-                  <span className="text-white font-medium">CDB / Tesouro / Poupanca</span> — atualize quando quiser, verificando o saldo na corretora ou banco.
-                  Conta: ((saldo atual - valor investido) / valor investido) x 100
+                  <span className="text-white font-medium">CDB / Tesouro / Poupanca</span> — veja o rendimento acumulado na corretora e digite o valor em R$.
+                  Ex: saldo R$ 2.130 - investiu R$ 2.000 = digite <span className="text-green-400">130</span>
                 </p>
               </div>
               <div className="flex gap-2 items-start">
                 <ArrowRight size={14} className="text-orange-400 mt-1 shrink-0" />
                 <p className="text-gray-400 text-sm">
-                  <span className="text-white font-medium">Acoes / Cripto</span> — atualize quando quiser, com base no preco atual.
-                  Pode ser negativo se o preco caiu. Conta: ((preco atual - preco compra) / preco compra) x 100
+                  <span className="text-white font-medium">Acoes / Cripto</span> — calcule a diferenca entre o valor atual e o investido.
+                  Ex: acao vale R$ 1.150, comprou por R$ 1.000 = digite <span className="text-green-400">150</span>
                 </p>
               </div>
             </div>
@@ -592,7 +592,7 @@ function Guia() {
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Clique em "Novo Investimento" e preencha: tipo, descricao, data do aporte, valor investido,
-                rentabilidade estimada e rentabilidade real (comeca em 0%). O sistema valida que o valor
+                rentabilidade estimada e rendimento recebido (comeca em R$ 0). O sistema valida que o valor
                 seja maior que zero antes de salvar.
               </p>
             </div>
@@ -633,14 +633,14 @@ function Guia() {
               </p>
               <div className="bg-gray-800/80 rounded-lg p-3 font-mono text-sm space-y-1">
                 <p className="text-gray-400">
-                  <span className="text-blue-400">Valor Atual</span> = Valor Investido x (1 + Rent. Real / 100)
+                  <span className="text-blue-400">Valor Atual</span> = Valor Investido + Rendimento Recebido
                 </p>
                 <p className="text-gray-400">
-                  <span className="text-green-400">Lucro</span> = Valor Atual - Valor Investido
+                  <span className="text-green-400">Lucro</span> = Rendimento Recebido
                 </p>
               </div>
               <p className="text-gray-500 text-xs mt-2">
-                Ex: R$ 5.000 com 8.3% de rentabilidade real = R$ 5.415,00 (lucro de R$ 415)
+                Ex: Investiu R$ 5.000 e recebeu R$ 415 de rendimento = Valor Atual R$ 5.415,00
               </p>
             </div>
 
@@ -664,7 +664,7 @@ function Guia() {
                 <h4 className="text-white font-semibold text-sm">Atualizacao e Resgate</h4>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Periodicamente, edite seus investimentos para atualizar a rentabilidade real.
+                Periodicamente, edite seus investimentos para atualizar o rendimento recebido em R$.
                 Quando resgatar, mude o status para "Resgatado" — o investimento continua
                 visivel na tabela (historico) mas sai dos calculos de KPI e do grafico.
               </p>

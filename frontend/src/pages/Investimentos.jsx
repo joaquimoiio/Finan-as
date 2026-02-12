@@ -36,7 +36,7 @@ function Investimentos() {
 
   const [form, setForm] = useState({
     tipo: 'CDB', descricao: '', dataAporte: '', valorInvestido: '',
-    rentabilidadeEstimada: '', rentabilidadeReal: '0', status: 'Ativo'
+    rentabilidadeEstimada: '', rendimentoRecebido: '0', status: 'Ativo'
   })
 
   useEffect(() => { carregarInvestimentos() }, [])
@@ -73,17 +73,19 @@ function Investimentos() {
     setEditando(null)
     setForm({
       tipo: 'CDB', descricao: '', dataAporte: '', valorInvestido: '',
-      rentabilidadeEstimada: '', rentabilidadeReal: '0', status: 'Ativo'
+      rentabilidadeEstimada: '', rendimentoRecebido: '0', status: 'Ativo'
     })
     setModalAberto(true)
   }
 
   const abrirEditar = (inv) => {
     setEditando(inv)
+    // Converte rentabilidadeReal (%) de volta para rendimento em R$
+    const rendimento = inv.valorInvestido * ((inv.rentabilidadeReal || 0) / 100)
     setForm({
       tipo: inv.tipo, descricao: inv.descricao, dataAporte: inv.dataAporte,
       valorInvestido: inv.valorInvestido, rentabilidadeEstimada: inv.rentabilidadeEstimada,
-      rentabilidadeReal: inv.rentabilidadeReal || 0, status: inv.status
+      rendimentoRecebido: rendimento.toFixed(2), status: inv.status
     })
     setModalAberto(true)
   }
@@ -101,12 +103,15 @@ function Investimentos() {
       return
     }
     try {
+      const rendimento = parseFloat(form.rendimentoRecebido) || 0
+      const rentabilidadeReal = valorNum > 0 ? (rendimento / valorNum) * 100 : 0
       const dados = {
         ...form,
         valorInvestido: valorNum,
         rentabilidadeEstimada: rentEstNum,
-        rentabilidadeReal: parseFloat(form.rentabilidadeReal) || 0
+        rentabilidadeReal
       }
+      delete dados.rendimentoRecebido
       if (editando) await atualizarInvestimento(editando.id, dados)
       else await criarInvestimento(dados)
       setModalAberto(false)
@@ -218,8 +223,8 @@ function Investimentos() {
                       <span className="text-white text-xs font-medium">{formatarMoeda(valorAtual)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500 text-xs">Est. / Real</span>
-                      <span className="text-gray-400 text-xs">{inv.rentabilidadeEstimada}% / {rentReal}%</span>
+                      <span className="text-gray-500 text-xs">Rendimento</span>
+                      <span className={`text-xs font-medium ${lucro >= 0 ? 'text-[#00B050]' : 'text-[#FF4444]'}`}>{formatarMoeda(lucro)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500 text-xs">Lucro</span>
@@ -243,7 +248,7 @@ function Investimentos() {
                   <th className="px-3 py-3 text-gray-400 font-medium hidden lg:table-cell">Data Aporte</th>
                   <th className="px-3 py-3 text-gray-400 font-medium text-right">Investido</th>
                   <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rent. Est.</th>
-                  <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rent. Real</th>
+                  <th className="px-3 py-3 text-gray-400 font-medium text-right hidden lg:table-cell">Rendimento</th>
                   <th className="px-3 py-3 text-gray-400 font-medium text-right">Valor Atual</th>
                   <th className="px-3 py-3 text-gray-400 font-medium text-right">Lucro</th>
                   <th className="px-3 py-3 text-gray-400 font-medium text-center">Status</th>
@@ -262,7 +267,7 @@ function Investimentos() {
                       <td className="px-3 py-3 text-gray-400 hidden lg:table-cell">{formatarData(inv.dataAporte)}</td>
                       <td className="px-3 py-3 text-white text-right">{formatarMoeda(inv.valorInvestido)}</td>
                       <td className="px-3 py-3 text-gray-400 text-right hidden lg:table-cell">{inv.rentabilidadeEstimada}%</td>
-                      <td className="px-3 py-3 text-gray-400 text-right hidden lg:table-cell">{rentReal}%</td>
+                      <td className={`px-3 py-3 text-right hidden lg:table-cell font-medium ${lucro >= 0 ? 'text-[#00B050]' : 'text-[#FF4444]'}`}>{formatarMoeda(lucro)}</td>
                       <td className="px-3 py-3 text-white text-right font-medium">{formatarMoeda(valorAtual)}</td>
                       <td className={`px-3 py-3 text-right font-semibold ${lucro >= 0 ? 'text-[#00B050]' : 'text-[#FF4444]'}`}>
                         {formatarMoeda(lucro)}
@@ -332,11 +337,12 @@ function Investimentos() {
               />
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1.5">Rent. Real (%)</label>
-              <input type="number" step="0.1" value={form.rentabilidadeReal}
-                onChange={(e) => setForm({ ...form, rentabilidadeReal: e.target.value })} placeholder="0"
+              <label className="block text-gray-400 text-sm mb-1.5">Rendimento (R$)</label>
+              <input type="number" step="0.01" min="0" value={form.rendimentoRecebido}
+                onChange={(e) => setForm({ ...form, rendimentoRecebido: e.target.value })} placeholder="2.70"
                 className="w-full px-3 py-2.5 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              <span className="text-gray-500 text-xs mt-1 block">Quanto recebeu ate agora</span>
             </div>
           </div>
           <div>
