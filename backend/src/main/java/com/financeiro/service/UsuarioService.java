@@ -4,6 +4,7 @@ import com.financeiro.config.JwtUtil;
 import com.financeiro.model.Usuario;
 import com.financeiro.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,8 +79,11 @@ public class UsuarioService {
      * Usado pelos outros services para filtrar dados por usuario.
      */
     public Long getUsuarioLogadoId() {
-        String email = (String) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth.getPrincipal() == null) {
+            throw new RuntimeException("Usuario nao autenticado");
+        }
+        String email = (String) auth.getPrincipal();
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
         return usuario.getId();

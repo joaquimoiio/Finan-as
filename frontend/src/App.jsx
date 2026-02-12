@@ -8,6 +8,7 @@ import Receitas from './pages/Receitas'
 import Despesas from './pages/Despesas'
 import Investimentos from './pages/Investimentos'
 import Planejamento from './pages/Planejamento'
+import Guia from './pages/Guia'
 
 // Componente que protege rotas — redireciona para /login se nao estiver logado
 function RotaProtegida({ children }) {
@@ -51,6 +52,9 @@ function App() {
       } />
       <Route path="/planejamento" element={
         <RotaProtegida><Layout><Planejamento /></Layout></RotaProtegida>
+      } />
+      <Route path="/guia" element={
+        <RotaProtegida><Layout><Guia /></Layout></RotaProtegida>
       } />
     </Routes>
   )

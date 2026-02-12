@@ -6,6 +6,7 @@ import {
   CreditCard,
   TrendingUp,
   Target,
+  BookOpen,
   LogOut,
   X,
   Wallet
@@ -18,6 +19,7 @@ const LINKS = [
   { to: '/despesas', icone: CreditCard, texto: 'Despesas' },
   { to: '/investimentos', icone: TrendingUp, texto: 'Investimentos' },
   { to: '/planejamento', icone: Target, texto: 'Planejamento' },
+  { to: '/guia', icone: BookOpen, texto: 'Guia' },
 ]
 
 /**

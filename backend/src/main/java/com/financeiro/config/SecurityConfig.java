@@ -35,8 +35,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Libera rotas de autenticacao
                         .requestMatchers("/api/auth/**").permitAll()
-                        // Libera o console do H2 (para desenvolvimento)
-                        .requestMatchers("/h2-console/**").permitAll()
                         // Todas as outras rotas precisam de autenticacao
                         .anyRequest().authenticated()
                 )
@@ -45,9 +43,6 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                // Permite o H2 Console funcionar (usa iframe)
-                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
 
                 // Adiciona o filtro JWT antes do filtro padrao do Spring
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

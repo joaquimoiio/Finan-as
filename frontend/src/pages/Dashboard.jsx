@@ -73,7 +73,13 @@ function Dashboard() {
     )
   }
 
-  if (!dados) return null
+  if (!dados) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-gray-500">Nenhum dado disponivel para este periodo</p>
+      </div>
+    )
+  }
 
   // Prepara dados dos graficos
   const gastosPorCategoria = (dados.gastosPorCategoria || [])

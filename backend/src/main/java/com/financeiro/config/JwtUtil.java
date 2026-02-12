@@ -61,13 +61,19 @@ public class JwtUtil {
 
     /**
      * Extrai o email (subject) do token JWT.
+     * Retorna null se o token for invalido.
      */
     public String getEmail(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(getChave())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.getSubject();
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getChave())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            return claims.getSubject();
+        } catch (Exception e) {
+            System.out.println("Erro ao extrair email do token: " + e.getMessage());
+            return null;
+        }
     }
 }

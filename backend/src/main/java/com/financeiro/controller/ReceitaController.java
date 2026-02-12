@@ -27,6 +27,9 @@ public class ReceitaController {
     @GetMapping
     public ResponseEntity<?> listar(@RequestParam int mes, @RequestParam int ano) {
         try {
+            if (mes < 1 || mes > 12 || ano < 1900 || ano > 2100) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Mes deve ser entre 1-12 e ano entre 1900-2100"));
+            }
             List<Receita> receitas = receitaService.listar(mes, ano);
             return ResponseEntity.ok(receitas);
         } catch (Exception e) {
@@ -42,6 +45,9 @@ public class ReceitaController {
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody Receita receita) {
         try {
+            if (receita.getValor() == null || receita.getValor() <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Valor deve ser maior que zero"));
+            }
             Receita salva = receitaService.salvar(receita);
             System.out.println("Receita criada: " + salva.getFonte() + " - R$ " + salva.getValor());
             return ResponseEntity.ok(salva);

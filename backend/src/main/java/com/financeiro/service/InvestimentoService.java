@@ -4,6 +4,7 @@ import com.financeiro.model.Investimento;
 import com.financeiro.repository.InvestimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class InvestimentoService {
     /**
      * Salva um novo investimento para o usuario logado.
      */
+    @Transactional
     public Investimento salvar(Investimento investimento) {
         investimento.setUsuarioId(usuarioService.getUsuarioLogadoId());
         return investimentoRepository.save(investimento);
@@ -53,16 +55,21 @@ public class InvestimentoService {
     /**
      * Atualiza um investimento existente.
      */
+    @Transactional
     public Investimento atualizar(Long id, Investimento investimentoAtualizado) {
         Investimento investimento = buscarPorId(id);
 
-        investimento.setTipo(investimentoAtualizado.getTipo());
-        investimento.setDescricao(investimentoAtualizado.getDescricao());
-        investimento.setDataAporte(investimentoAtualizado.getDataAporte());
-        investimento.setValorInvestido(investimentoAtualizado.getValorInvestido());
-        investimento.setRentabilidadeEstimada(investimentoAtualizado.getRentabilidadeEstimada());
-        investimento.setRentabilidadeReal(investimentoAtualizado.getRentabilidadeReal());
-        investimento.setStatus(investimentoAtualizado.getStatus());
+        if (investimentoAtualizado.getValorInvestido() != null && investimentoAtualizado.getValorInvestido() <= 0) {
+            throw new RuntimeException("Valor investido deve ser maior que zero");
+        }
+
+        if (investimentoAtualizado.getTipo() != null) investimento.setTipo(investimentoAtualizado.getTipo());
+        if (investimentoAtualizado.getDescricao() != null) investimento.setDescricao(investimentoAtualizado.getDescricao());
+        if (investimentoAtualizado.getDataAporte() != null) investimento.setDataAporte(investimentoAtualizado.getDataAporte());
+        if (investimentoAtualizado.getValorInvestido() != null) investimento.setValorInvestido(investimentoAtualizado.getValorInvestido());
+        if (investimentoAtualizado.getRentabilidadeEstimada() != null) investimento.setRentabilidadeEstimada(investimentoAtualizado.getRentabilidadeEstimada());
+        if (investimentoAtualizado.getRentabilidadeReal() != null) investimento.setRentabilidadeReal(investimentoAtualizado.getRentabilidadeReal());
+        if (investimentoAtualizado.getStatus() != null) investimento.setStatus(investimentoAtualizado.getStatus());
 
         return investimentoRepository.save(investimento);
     }
@@ -70,6 +77,7 @@ public class InvestimentoService {
     /**
      * Deleta um investimento por ID.
      */
+    @Transactional
     public void deletar(Long id) {
         buscarPorId(id);
         investimentoRepository.deleteById(id);

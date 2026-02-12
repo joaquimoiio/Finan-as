@@ -25,6 +25,9 @@ public class DashboardController {
     @GetMapping
     public ResponseEntity<?> getDashboard(@RequestParam int mes, @RequestParam int ano) {
         try {
+            if (mes < 1 || mes > 12 || ano < 1900 || ano > 2100) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Mes deve ser entre 1-12 e ano entre 1900-2100"));
+            }
             Map<String, Object> dashboard = dashboardService.getDashboard(mes, ano);
             return ResponseEntity.ok(dashboard);
         } catch (Exception e) {

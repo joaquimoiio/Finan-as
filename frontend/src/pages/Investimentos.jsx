@@ -90,12 +90,22 @@ function Investimentos() {
 
   const salvar = async (e) => {
     e.preventDefault()
+    const valorNum = parseFloat(form.valorInvestido)
+    const rentEstNum = parseFloat(form.rentabilidadeEstimada)
+    if (isNaN(valorNum) || valorNum <= 0) {
+      alert('Valor investido deve ser um numero maior que zero')
+      return
+    }
+    if (isNaN(rentEstNum)) {
+      alert('Rentabilidade estimada deve ser um numero valido')
+      return
+    }
     try {
       const dados = {
         ...form,
-        valorInvestido: parseFloat(form.valorInvestido),
-        rentabilidadeEstimada: parseFloat(form.rentabilidadeEstimada),
-        rentabilidadeReal: parseFloat(form.rentabilidadeReal)
+        valorInvestido: valorNum,
+        rentabilidadeEstimada: rentEstNum,
+        rentabilidadeReal: parseFloat(form.rentabilidadeReal) || 0
       }
       if (editando) await atualizarInvestimento(editando.id, dados)
       else await criarInvestimento(dados)
@@ -108,12 +118,8 @@ function Investimentos() {
   }
 
   const deletar = async () => {
-    try {
-      await deletarInvestimento(idParaDeletar)
-      carregarInvestimentos()
-    } catch (error) {
-      console.log('Erro ao deletar investimento:', error)
-    }
+    await deletarInvestimento(idParaDeletar)
+    carregarInvestimentos()
   }
 
   return (

@@ -27,6 +27,9 @@ public class DespesaController {
     @GetMapping
     public ResponseEntity<?> listar(@RequestParam int mes, @RequestParam int ano) {
         try {
+            if (mes < 1 || mes > 12 || ano < 1900 || ano > 2100) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Mes deve ser entre 1-12 e ano entre 1900-2100"));
+            }
             List<Despesa> despesas = despesaService.listar(mes, ano);
             return ResponseEntity.ok(despesas);
         } catch (Exception e) {
@@ -42,6 +45,9 @@ public class DespesaController {
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody Despesa despesa) {
         try {
+            if (despesa.getValor() == null || despesa.getValor() <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Valor deve ser maior que zero"));
+            }
             Despesa salva = despesaService.salvar(despesa);
             System.out.println("Despesa criada: " + salva.getDescricao() + " - R$ " + salva.getValor());
             return ResponseEntity.ok(salva);

@@ -4,6 +4,7 @@ import com.financeiro.model.Meta;
 import com.financeiro.repository.MetaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class MetaService {
     /**
      * Salva uma nova meta para o usuario logado.
      */
+    @Transactional
     public Meta salvar(Meta meta) {
         meta.setUsuarioId(usuarioService.getUsuarioLogadoId());
         return metaRepository.save(meta);
@@ -53,13 +55,18 @@ public class MetaService {
     /**
      * Atualiza uma meta existente.
      */
+    @Transactional
     public Meta atualizar(Long id, Meta metaAtualizada) {
         Meta meta = buscarPorId(id);
 
-        meta.setDescricao(metaAtualizada.getDescricao());
-        meta.setValorMeta(metaAtualizada.getValorMeta());
-        meta.setValorAtual(metaAtualizada.getValorAtual());
-        meta.setAporteMensal(metaAtualizada.getAporteMensal());
+        if (metaAtualizada.getValorMeta() != null && metaAtualizada.getValorMeta() <= 0) {
+            throw new RuntimeException("Valor da meta deve ser maior que zero");
+        }
+
+        if (metaAtualizada.getDescricao() != null) meta.setDescricao(metaAtualizada.getDescricao());
+        if (metaAtualizada.getValorMeta() != null) meta.setValorMeta(metaAtualizada.getValorMeta());
+        if (metaAtualizada.getValorAtual() != null) meta.setValorAtual(metaAtualizada.getValorAtual());
+        if (metaAtualizada.getAporteMensal() != null) meta.setAporteMensal(metaAtualizada.getAporteMensal());
 
         return metaRepository.save(meta);
     }
@@ -67,6 +74,7 @@ public class MetaService {
     /**
      * Deleta uma meta por ID.
      */
+    @Transactional
     public void deletar(Long id) {
         buscarPorId(id);
         metaRepository.deleteById(id);

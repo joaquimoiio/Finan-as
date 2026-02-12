@@ -30,7 +30,10 @@ export function AuthProvider({ children }) {
   // Faz login — chama a API e salva o token
   const fazerLogin = async (email, senha) => {
     const resposta = await apiLogin({ email, senha })
-    const { token: novoToken, nome } = resposta.data
+    const novoToken = resposta.data?.token || ''
+    const nome = resposta.data?.nome || 'Usuario'
+
+    if (!novoToken) throw new Error('Token nao recebido do servidor')
 
     localStorage.setItem('token', novoToken)
     localStorage.setItem('nomeUsuario', nome)
@@ -42,7 +45,10 @@ export function AuthProvider({ children }) {
   // Faz registro — chama a API, salva token e redireciona
   const fazerRegistro = async (nome, email, senha) => {
     const resposta = await apiRegistro({ nome, email, senha })
-    const { token: novoToken, nome: nomeRetornado } = resposta.data
+    const novoToken = resposta.data?.token || ''
+    const nomeRetornado = resposta.data?.nome || nome
+
+    if (!novoToken) throw new Error('Token nao recebido do servidor')
 
     localStorage.setItem('token', novoToken)
     localStorage.setItem('nomeUsuario', nomeRetornado)

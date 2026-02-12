@@ -42,6 +42,9 @@ public class MetaController {
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody Meta meta) {
         try {
+            if (meta.getValorMeta() == null || meta.getValorMeta() <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Valor da meta deve ser maior que zero"));
+            }
             Meta salva = metaService.salvar(meta);
             System.out.println("Meta criada: " + salva.getDescricao());
             return ResponseEntity.ok(salva);

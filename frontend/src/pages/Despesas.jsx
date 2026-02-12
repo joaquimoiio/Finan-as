@@ -93,8 +93,13 @@ function Despesas() {
 
   const salvar = async (e) => {
     e.preventDefault()
+    const valorNumerico = parseFloat(form.valor)
+    if (isNaN(valorNumerico) || valorNumerico <= 0) {
+      alert('Valor deve ser um numero maior que zero')
+      return
+    }
     try {
-      const dados = { ...form, valor: parseFloat(form.valor) }
+      const dados = { ...form, valor: valorNumerico }
       if (editando) await atualizarDespesa(editando.id, dados)
       else await criarDespesa(dados)
       setModalAberto(false)
@@ -106,12 +111,8 @@ function Despesas() {
   }
 
   const deletar = async () => {
-    try {
-      await deletarDespesa(idParaDeletar)
-      carregarDespesas()
-    } catch (error) {
-      console.log('Erro ao deletar despesa:', error)
-    }
+    await deletarDespesa(idParaDeletar)
+    carregarDespesas()
   }
 
   const total = despesasFiltradas.reduce((soma, d) => soma + (d.valor || 0), 0)

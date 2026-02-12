@@ -80,8 +80,13 @@ function Receitas() {
   // Salva (criar ou atualizar)
   const salvar = async (e) => {
     e.preventDefault()
+    const valorNumerico = parseFloat(form.valor)
+    if (isNaN(valorNumerico) || valorNumerico <= 0) {
+      alert('Valor deve ser um numero maior que zero')
+      return
+    }
     try {
-      const dados = { ...form, valor: parseFloat(form.valor) }
+      const dados = { ...form, valor: valorNumerico }
       if (editando) {
         await atualizarReceita(editando.id, dados)
       } else {
@@ -97,12 +102,8 @@ function Receitas() {
 
   // Exclui
   const deletar = async () => {
-    try {
-      await deletarReceita(idParaDeletar)
-      carregarReceitas()
-    } catch (error) {
-      console.log('Erro ao deletar receita:', error)
-    }
+    await deletarReceita(idParaDeletar)
+    carregarReceitas()
   }
 
   // Total do mes

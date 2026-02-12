@@ -42,6 +42,9 @@ public class InvestimentoController {
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody Investimento investimento) {
         try {
+            if (investimento.getValorInvestido() == null || investimento.getValorInvestido() <= 0) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Valor investido deve ser maior que zero"));
+            }
             Investimento salvo = investimentoService.salvar(investimento);
             System.out.println("Investimento criado: " + salvo.getDescricao() + " - R$ " + salvo.getValorInvestido());
             return ResponseEntity.ok(salvo);

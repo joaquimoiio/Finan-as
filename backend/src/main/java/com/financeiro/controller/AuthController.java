@@ -26,6 +26,11 @@ public class AuthController {
     @PostMapping("/registro")
     public ResponseEntity<?> registro(@RequestBody Usuario usuario) {
         try {
+            if (usuario.getEmail() == null || usuario.getEmail().isEmpty() ||
+                usuario.getSenha() == null || usuario.getSenha().isEmpty() ||
+                usuario.getNome() == null || usuario.getNome().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Nome, email e senha sao obrigatorios"));
+            }
             Map<String, String> resposta = usuarioService.registrar(usuario);
             System.out.println("Novo usuario registrado: " + usuario.getEmail());
             return ResponseEntity.ok(resposta);
@@ -44,6 +49,9 @@ public class AuthController {
         try {
             String email = dados.get("email");
             String senha = dados.get("senha");
+            if (email == null || email.isEmpty() || senha == null || senha.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("erro", "Email e senha sao obrigatorios"));
+            }
             Map<String, String> resposta = usuarioService.login(email, senha);
             System.out.println("Login realizado: " + email);
             return ResponseEntity.ok(resposta);

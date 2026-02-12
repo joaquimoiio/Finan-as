@@ -66,12 +66,23 @@ function Planejamento() {
 
   const salvar = async (e) => {
     e.preventDefault()
+    const valorMetaNum = parseFloat(form.valorMeta)
+    const valorAtualNum = parseFloat(form.valorAtual) || 0
+    const aporteNum = parseFloat(form.aporteMensal)
+    if (isNaN(valorMetaNum) || valorMetaNum <= 0) {
+      alert('Valor da meta deve ser um numero maior que zero')
+      return
+    }
+    if (isNaN(aporteNum) || aporteNum < 0) {
+      alert('Aporte mensal deve ser um numero valido')
+      return
+    }
     try {
       const dados = {
         ...form,
-        valorMeta: parseFloat(form.valorMeta),
-        valorAtual: parseFloat(form.valorAtual),
-        aporteMensal: parseFloat(form.aporteMensal)
+        valorMeta: valorMetaNum,
+        valorAtual: valorAtualNum,
+        aporteMensal: aporteNum
       }
       if (editando) await atualizarMeta(editando.id, dados)
       else await criarMeta(dados)
@@ -84,12 +95,8 @@ function Planejamento() {
   }
 
   const deletar = async () => {
-    try {
-      await deletarMeta(idParaDeletar)
-      carregarDados()
-    } catch (error) {
-      console.log('Erro ao deletar meta:', error)
-    }
+    await deletarMeta(idParaDeletar)
+    carregarDados()
   }
 
   if (carregando) {
@@ -219,9 +226,12 @@ function Planejamento() {
         ) : (
           <div className="space-y-4">
             {metas.map((meta) => {
-              const progresso = meta.valorMeta > 0 ? (meta.valorAtual / meta.valorMeta) * 100 : 0
-              const faltam = meta.valorMeta - meta.valorAtual
-              const mesesRestantes = meta.aporteMensal > 0 ? Math.ceil(Math.max(faltam, 0) / meta.aporteMensal) : '∞'
+              const valorMeta = meta.valorMeta || 0
+              const valorAtual = meta.valorAtual || 0
+              const aporteMensal = meta.aporteMensal || 0
+              const progresso = valorMeta > 0 ? (valorAtual / valorMeta) * 100 : 0
+              const faltam = valorMeta - valorAtual
+              const mesesRestantes = aporteMensal > 0 ? Math.ceil(Math.max(faltam, 0) / aporteMensal) : '∞'
               const atingida = progresso >= 100
 
               return (

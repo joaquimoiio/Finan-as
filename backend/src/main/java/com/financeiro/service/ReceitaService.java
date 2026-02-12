@@ -4,6 +4,7 @@ import com.financeiro.model.Receita;
 import com.financeiro.repository.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ReceitaService {
     /**
      * Salva uma nova receita para o usuario logado.
      */
+    @Transactional
     public Receita salvar(Receita receita) {
         receita.setUsuarioId(usuarioService.getUsuarioLogadoId());
         return receitaRepository.save(receita);
@@ -57,13 +59,18 @@ public class ReceitaService {
     /**
      * Atualiza uma receita existente.
      */
+    @Transactional
     public Receita atualizar(Long id, Receita receitaAtualizada) {
-        Receita receita = buscarPorId(id); // Ja verifica se pertence ao usuario
+        Receita receita = buscarPorId(id);
 
-        receita.setData(receitaAtualizada.getData());
-        receita.setFonte(receitaAtualizada.getFonte());
-        receita.setTipo(receitaAtualizada.getTipo());
-        receita.setValor(receitaAtualizada.getValor());
+        if (receitaAtualizada.getValor() != null && receitaAtualizada.getValor() <= 0) {
+            throw new RuntimeException("Valor deve ser maior que zero");
+        }
+
+        if (receitaAtualizada.getData() != null) receita.setData(receitaAtualizada.getData());
+        if (receitaAtualizada.getFonte() != null) receita.setFonte(receitaAtualizada.getFonte());
+        if (receitaAtualizada.getTipo() != null) receita.setTipo(receitaAtualizada.getTipo());
+        if (receitaAtualizada.getValor() != null) receita.setValor(receitaAtualizada.getValor());
         receita.setObservacoes(receitaAtualizada.getObservacoes());
 
         return receitaRepository.save(receita);

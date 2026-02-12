@@ -79,7 +79,7 @@ public class DashboardService {
 
         // Percentual investido (despesas na categoria "Investimentos" / receitas * 100)
         double gastoInvestimentos = despesas.stream()
-                .filter(d -> "Investimentos".equals(d.getCategoria()))
+                .filter(d -> "Investimentos".equalsIgnoreCase(d.getCategoria()))
                 .mapToDouble(d -> d.getValor() != null ? d.getValor() : 0)
                 .sum();
         double percentualInvestido = totalReceitas > 0
@@ -117,14 +117,14 @@ public class DashboardService {
 
         // Total investido (soma de todos os investimentos ativos)
         double totalInvestido = investimentos.stream()
-                .filter(i -> "Ativo".equals(i.getStatus()))
+                .filter(i -> "Ativo".equalsIgnoreCase(i.getStatus()))
                 .mapToDouble(i -> i.getValorInvestido() != null ? i.getValorInvestido() : 0)
                 .sum();
         dashboard.put("totalInvestido", totalInvestido);
 
         // Patrimonio atual (valor investido + rentabilidade real)
         double patrimonioAtual = investimentos.stream()
-                .filter(i -> "Ativo".equals(i.getStatus()))
+                .filter(i -> "Ativo".equalsIgnoreCase(i.getStatus()))
                 .mapToDouble(i -> {
                     double valorInv = i.getValorInvestido() != null ? i.getValorInvestido() : 0;
                     double rentReal = i.getRentabilidadeReal() != null
@@ -137,7 +137,7 @@ public class DashboardService {
         // --- Despesas pendentes ---
 
         double despesasPendentes = despesas.stream()
-                .filter(d -> "Pendente".equals(d.getStatus()))
+                .filter(d -> "Pendente".equalsIgnoreCase(d.getStatus()))
                 .mapToDouble(d -> d.getValor() != null ? d.getValor() : 0)
                 .sum();
         dashboard.put("despesasPendentes", despesasPendentes);
@@ -145,14 +145,14 @@ public class DashboardService {
         // --- Despesas fixas e variaveis (para regra 50/30/20) ---
 
         double despesasFixas = despesas.stream()
-                .filter(d -> "Fixa".equals(d.getTipo()))
+                .filter(d -> "Fixa".equalsIgnoreCase(d.getTipo()))
                 .mapToDouble(d -> d.getValor() != null ? d.getValor() : 0)
                 .sum();
         dashboard.put("despesasFixas", despesasFixas);
 
         double despesasVariaveis = despesas.stream()
-                .filter(d -> "Variavel".equals(d.getTipo()) || "Variável".equals(d.getTipo()))
-                .filter(d -> !"Investimentos".equals(d.getCategoria()))
+                .filter(d -> "Variavel".equalsIgnoreCase(d.getTipo()) || "Variável".equalsIgnoreCase(d.getTipo()))
+                .filter(d -> !"Investimentos".equalsIgnoreCase(d.getCategoria()))
                 .mapToDouble(d -> d.getValor() != null ? d.getValor() : 0)
                 .sum();
         dashboard.put("despesasVariaveis", despesasVariaveis);
